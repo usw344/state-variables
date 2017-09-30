@@ -12,8 +12,11 @@ float hur1X, hur1Y, hur2X, hur2Y, hur1Width, hur1Height, hur2Width, hur2Height; 
 float button1X, button1Y, button2X, button2Y;
 float button1W,button1H,button2W,button2H;
 
-// stuff for sound
-int audioPlayerNumber;
+// stuff for sound and the state var
+int audioPlayerNumber, state;
+
+// this is for opening logo
+PImage openingCircle, openingM;
 
 
 void setup() {
@@ -30,6 +33,11 @@ void setup() {
   // for sound
   minim = new Minim(this);
   
+  // for the opening menu
+  openingCircle = loadImage("opeining circle.png");
+  openingM = loadImage("opeining circle middle m.png");
+  
+  
 }
 
 
@@ -43,5 +51,5 @@ void draw() {
 
 ////////////////////// this section is for the main menu code.
 void opeingSplash() {
-  
+
 }
