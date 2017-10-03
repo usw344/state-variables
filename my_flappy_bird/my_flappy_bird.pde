@@ -14,12 +14,13 @@ float button1X, button1Y, button2X, button2Y;
 float button1W,button1H,button2W,button2H;
 
 // stuff for sound and the state var and other misc, stuff
-int audioPlayerNumber, state,counter, mX,mY;
+int audioPlayerNumber, state,counter;
 
 
 // this is for opening logo
-PImage openingCircle, openingM;
-
+PImage openingCircle, openingM, openingCopy, openingLinux;
+int  mX,mY;
+int pX,pY,cX,cY;
 
 
 void setup() {
@@ -40,29 +41,38 @@ void setup() {
   player = minim.loadFile("cleaned-expo.mp3");
   
   // for the opening menu
+  
   openingCircle = loadImage("opeining circle.png");
   openingM = loadImage("opeining circle middle m.png");
-  mY = -500;
+  
+  openingCopy = loadImage("c.png");
+  openingLinux = loadImage("copyright.png");
+ 
+  mY = -500;// for m
+  cY = 1000;// for copyright sign
+  pY = 1000;// for the prodoctions
   
   
 }
-
-
-
 
 void draw() {
   if (state == 1) {
    openingSplash();
    dropingInM();
+   MProductions();
   }
   
+  if (state == 2) {
+    background(255);
+  }
  
 }
 
 
 ////////////////////// this section is for the main menu code.
 void openingSplash() {
-  background(255); 
+  background(0); 
+  
   if (counter <= 799) {
      counter += 50;
    }
@@ -74,13 +84,20 @@ void openingSplash() {
 void dropingInM() {
    if ((counter >= 799) && (mY < height/2))  {
      mY += 60;
-     image(openingM,width/2,mY,700,700);
    }
-   if (mY >= height/2-30) {
+   
+   if (mY >= height/2-25) {
      player.play();
    }
+   
    image(openingM,width/2,mY,700,700);
 }
-void copyWriteText(){
-  
+void MProductions(){
+  if ((mY >= height/2) && (cY > height - height/3 + 200)) {
+   cY -= 50; 
+   pY -= 70;
+  }
+  imageMode(CENTER);
+  image(openingCopy, width/4,cY,400,400);   
+  image(openingLinux, width/2, pY,400,400);
 }
