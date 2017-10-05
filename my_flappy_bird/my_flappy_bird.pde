@@ -32,13 +32,13 @@ void setup() {
   timer = millis();
   
   // button 1
-  button1X = width/4;
+  button1X = width/12;
   button1Y = height - height/2 - height/3;
   button1W = 300;
   button1H = 100;
   
   // button 2
-  button2X = width/2+ width/4;
+  button2X = button1X * 6;
   button2Y = height - height/2 - height/3;
   button2W = 300;
   button2H = 100;
@@ -60,10 +60,14 @@ void setup() {
   mY = -500;// for m
   cY = 1000;// for copyright sign
   pY = 1000;// for the prodoctions
- // for the buttons color
+ // for the button 1 (start) color
   r = 255;
   g = 118;
   b = 13;
+  // for button 2 (how to play) color
+  r1 = 255;
+  g1 = 118;
+  b1 = 13;
 }
 
 void draw() {
@@ -134,13 +138,13 @@ void drawButtons() {
   
   fill(255);
   textSize(45);
-  text("START",button1X-60,button1Y);
-  text("Instructions",button2X-130,button2Y);
+  text("START",button1X+ button1W/4,  button1Y+button1H/2 + button1H/8);
+  text("Instructions",button2X + button2W/12,  button2Y + button2H/2 + button2H/8);
 
 
 }
 void isOnButtonStart() {
-  if ((mouseY > button1Y+10) && (mouseY < button1Y + button1H) && (mouseX < button1X + button1W) && (mouseX > button1X+10)) {
+  if ((mouseY > button1Y) && (mouseY < button1Y + button1H) && (mouseX < button1X + button1W) && (mouseX > button1X)) {
     r = 242;
     g = 207;
     b = 181;
@@ -163,4 +167,9 @@ void musicHandler() {
     musicNum = -1;
   }
 
+}
+void keyPressed() {
+  if (key == 'w') {
+    state = 2;
+  }
 }
