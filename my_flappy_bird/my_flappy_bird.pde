@@ -14,7 +14,7 @@ float button1X, button1Y, button2X, button2Y;
 float button1W,button1H,button2W,button2H;
 
 // stuff for sound and the state var and other misc, stuff
-int audioPlayerNumber, state,counter,timer,r,g,b,musicNum;
+int audioPlayerNumber, state,counter,timer,r,g,b,r1,b1,g1,musicNum;
 
 
 // this is for opening logo
@@ -75,6 +75,7 @@ void draw() {
   
   if (state == 2) {
     drawButtons();
+    isOnButtonStart();
   }
   musicHandler();
 }
@@ -124,9 +125,11 @@ void drawButtons() {
   
   noStroke();
   fill(r,g,b);
-  rectMode(CENTER);
+  //rectMode(CENTER);
 
   rect(button1X,button1Y,button1W,button1H);
+  
+  fill(r1,g1,b1);
   rect(button2X,button2Y,button2W,button2H);
   
   fill(255);
@@ -136,13 +139,19 @@ void drawButtons() {
 
 
 }
-void keyPressed() {
-  state = 2;
+void isOnButtonStart() {
+  if ((mouseY > button1Y+10) && (mouseY < button1Y + button1H) && (mouseX < button1X + button1W) && (mouseX > button1X+10)) {
+    r = 242;
+    g = 207;
+    b = 181;
+  }
+  else {
+    r = 255;
+    g = 118;
+    b = 13;
+  }
 
 }
-
-
-
 
 
 
