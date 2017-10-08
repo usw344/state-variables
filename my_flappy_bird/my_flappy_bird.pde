@@ -7,15 +7,17 @@ Minim minim;
 AudioPlayer player;
 
 // the size and local of hudles
-float hur1X, hur1Y, hur2X, hur2Y, hur1Width, hur1Height, hur2Width, hur2Height; // for the hurdles
+float hur1X, hur1Y, hur2X, hur2Y;
+float hur1Width, hur1Height, hur2Width, hur2Height;
+float spaceBetweenHurdles,speedOfHurdles;
 
 /// the size of the opening screen button
 float button1X, button1Y, button2X, button2Y,button3X,button3Y;
 float button1W,button1H,button2W,button2H,button3W,button3H;
 
 // stuff for sound and the state var and other misc, stuff
-int audioPlayerNumber, state,counter,timer,r,g,b,r1,b1,g1,r2,g2,b2,musicNum;
-
+int audioPlayerNumber, state,counter,timer,musicNum;
+float r,g,b,r1,b1,g1,r2,g2,b2;
 
 // this is for opening logo
 PImage openingCircle, openingM, openingCopy, openingLinux;
@@ -47,10 +49,11 @@ void setup() {
   counter = 0;
   
   // for button 3
-  button3X = width/2;
-  button3Y = height/2 + height/3;
   button3W = 300;
   button3H = 100;
+  button3X = width/4+button3W/6;
+  button3Y = height-height/4;
+
   
   // for sound
   minim = new Minim(this);
@@ -69,21 +72,48 @@ void setup() {
   cY = 1000;// for copyright sign
   pY = 1000;// for the prodoctions
  
+ 
  // for the button 1 (start) color
   r = 255;
   g = 118;
   b = 13;
+  
+  
+  
   // for button 2 (how to play) color
   r1 = 255;
   g1 = 118;
   b1 = 13;
+  
+  
+  
   // for button 3 (back button) color
   r2 = 255;
   g2 = 118;
   b2 = 13;
+  
+  
+
+  
+  // how much of a gap there is between the hur1 and hur 2 and there speed
+  spaceBetweenHurdles = 100;
+  speedOfHurdles = 5;
+  
+  
+  /// for the hurdles, these get changed after wards
+  hur1X = 400;
+  hur1Y= 0;
+  hur1Width = 85;
+  hur1Height = height/2;
+
+  hur2X = 400;
+  hur2Width = 85;
+  hur2Height = height/2;
+
 }
 
 void draw() {
+  println("the state is:  " + state);
   if (state == 1) { // the state for the opening splash
    openingSplash();
    dropingInM();
@@ -98,7 +128,10 @@ void draw() {
   }
   
   if (state == 3) { // THE MAIN GAME LOOP
-    //  
+    background(255);
+    displayHurdles();
+    moveHurdle();
+    //randomColorSelector();
 }
   if (state == 4) { // the how to play section
     displayBackButton();
@@ -204,7 +237,7 @@ void isOnHowButton() {
 }
 
 
-void startGameViaMouseClick() {
+void startGameViaMouseClick() { // checks which button user has selected how to play or start
   if (mousePressed) {
     if (isOnStartButton == true){
       state = 3;
@@ -224,26 +257,30 @@ void displayBackButton() {
   background(0);
   fill(r2,g2,b2);
   rect(button3X,button3Y,button3W,button3H);// drawing the how to back button
+  fill(255);
+  textSize(45);
+  text("Back",button3X + button3W/4,  button3Y + button3H/2 + button3H/8);
 }
 
 void timeTostartGame() {
-  if (isOnBackButton == true) {
-  state = 3;
+  if (isOnBackButton && mousePressed) {
+  state = 2;
   player.pause();
+  isOnBackButton = false;
   }
 }
 
 void isOnBackButton() {
   if ((mouseY > button3Y) && (mouseY < button3Y + button3H) && (mouseX < button3X + button3W) && (mouseX > button3X)) {
-    r1 = 242;
-    g1 = 207;
-    b1 = 181;
+    r2 = 242;
+    g2 = 207;
+    b2 = 181;
     isOnBackButton = true;
   }
   else {
-    r1 = 255;
-    g1 = 118;
-    b1 = 13;
+    r2 = 255;
+    g2 = 118;
+    b2 = 13;
   }
 
 }
@@ -261,12 +298,47 @@ void musicHandler() { // a little work around to manage all the background music
 }
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+///// for the game code. divided into logical sections.
+
+// all that has to do with hurdle action
+
+void randomColorSelector() {
+  if (state == 3) {
+    r = random(0,200);
+    g = random(0,190);
+    b = random(0,180);
+  }
+}
+
+void displayHurdles() {
+  fill(r,g,b);
+  noStroke();
+  rect(hur1X,hur1Y,hur1Width,hur1Height);
+  hur2Y = hur1Height + spaceBetweenHurdles;
+  rect(hur2X,hur2Y,hur2Width,hur2Height);
+}
+
+void moveHurdle() {
+
+  hur1X -= speedOfHurdles;
+  hur2X -= speedOfHurdles;
+  resetHurdles();
+}
+
+void resetHurdles() {
+  if (hur1X < 0 - hur1Width && hur2X < 0 -hur2Width) {
+    hur1X = width;
+    hur2X = width;
+    spaceBetweenHurdles = random(50,300);
+  }
+}
 
 
 void keyPressed() {
   if (key == 'w') {
-    state = 2;
+    state = 3;
   }
 }
