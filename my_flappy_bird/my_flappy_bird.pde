@@ -6,23 +6,31 @@ import ddf.minim.*;
 Minim minim;
 AudioPlayer player;
 
+// player stuff
+float playerX, playerWidth,playerHeight;
+
+
 // the size and local of hudles
 float hur1X, hur1Y, hur2X, hur2Y;
 float hur1Width, hur1Height, hur2Width, hur2Height;
 float spaceBetweenHurdles,speedOfHurdles;
 
+
 /// the size of the opening screen button
 float button1X, button1Y, button2X, button2Y,button3X,button3Y;
 float button1W,button1H,button2W,button2H,button3W,button3H;
+
 
 // stuff for sound and the state var and other misc, stuff
 int audioPlayerNumber, state,counter,timer,musicNum;
 float r,g,b,r1,b1,g1,r2,g2,b2;
 
+
 // this is for opening logo
 PImage openingCircle, openingM, openingCopy, openingLinux;
 int  mX,mY;
 int pX,pY,cX,cY;
+
 
 // for by buttons
 boolean isOnStartButton, isOnHowButton,isOnBackButton;
@@ -105,11 +113,15 @@ void setup() {
   hur1Y= 0;
   hur1Width = 85;
   hur1Height = height/2;
-
-  hur2X = 400;
+  
+  hur2X = 400; 
   hur2Width = 85;
   hur2Height = height/2;
-
+  
+  // player var
+  playerX = width/12;
+  playerWidth = 50;
+  playerHeight = 50;
 }
 
 void draw() {
@@ -132,6 +144,7 @@ void draw() {
     displayHurdles();
     moveHurdle();
     //randomColorSelector();
+    displayPlayer();
 }
   if (state == 4) { // the how to play section
     displayBackButton();
@@ -314,10 +327,17 @@ void randomColorSelector() {
 }
 
 void displayHurdles() {
+  r = (25);
+  g = (193);
+  b = (71);
   fill(r,g,b);
   noStroke();
+  
   rect(hur1X,hur1Y,hur1Width,hur1Height);
+  
+  // defining the hur2Y here.
   hur2Y = hur1Height + spaceBetweenHurdles;
+  
   rect(hur2X,hur2Y,hur2Width,hur2Height);
 }
 
@@ -332,13 +352,28 @@ void resetHurdles() {
   if (hur1X < 0 - hur1Width && hur2X < 0 -hur2Width) {
     hur1X = width;
     hur2X = width;
-    spaceBetweenHurdles = random(50,300);
+    spaceBetweenHurdles = random(65,100);
   }
 }
+
+// the section for playerMovement 
+void displayPlayer() {
+  fill(0);
+  rect(playerX,mouseY,playerWidth,playerHeight);
+}
+
+
+
+
+
+
 
 
 void keyPressed() {
   if (key == 'w') {
     state = 3;
+  }
+  if (key == 's') {
+    speedOfHurdles *= 2;
   }
 }
