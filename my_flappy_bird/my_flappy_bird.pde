@@ -114,9 +114,11 @@ void setup() {
   hur1Width = 85;
   hur1Height = height/2;
   
-  hur2X = 400; 
   hur2Width = 85;
   hur2Height = height/2;
+  hur2X = 400; 
+  hur2Y = height- 20;
+
   
   // player var
   playerX = width/12;
@@ -125,7 +127,7 @@ void setup() {
 }
 
 void draw() {
-  println("the state is:  " + state);
+
   if (state == 1) { // the state for the opening splash
    openingSplash();
    dropingInM();
@@ -332,13 +334,23 @@ void displayHurdles() {
   b = (71);
   fill(r,g,b);
   noStroke();
-  
+
   rect(hur1X,hur1Y,hur1Width,hur1Height);
   
   // defining the hur2Y here.
   hur2Y = hur1Height + spaceBetweenHurdles;
-  
+  if (hur2Y >= height) { // makes sure you 
+    hur2Y = height-50;
+    hur1Y = 0;
+
+  }
+  if (hur2Height > 700 && hur1Height > 700) { // make sures you do not get a wall
+    hur1Height = height/2 - 60;
+    hur2Height = height/2 + 60;
+
+  }
   rect(hur2X,hur2Y,hur2Width,hur2Height);
+
 }
 
 void moveHurdle() {
@@ -352,17 +364,24 @@ void resetHurdles() {
   if (hur1X < 0 - hur1Width && hur2X < 0 -hur2Width) {
     hur1X = width;
     hur2X = width;
-    spaceBetweenHurdles = random(65,100);
+    spaceBetweenHurdles = random(150,200);
+    hur1Height = random(100,height);
+ 
+    if (hur2Y <= height) { // this makes sures that the hur2 is floating in air
+      hur2Height += height - hur2Height;
+      }
   }
 }
 
 // the section for playerMovement 
 void displayPlayer() {
   fill(0);
-  rect(playerX,mouseY,playerWidth,playerHeight);
+  rect(playerX,mouseY,playerWidth,playerHeight); // also moves the player 
 }
 
-
+void isPlayerHittingHurs() {
+  if (playerX >= hur1X && mouseY <= hur1X + hur1Height) 
+}
 
 
 
