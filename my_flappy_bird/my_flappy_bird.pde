@@ -165,6 +165,7 @@ void draw() {
     isPlayerHittingHurs();
     displayPlayer();
     showPoints();
+    speedUp();
 }
   if (state == 4) { // the how to play section
     displayBackButton();
@@ -177,6 +178,7 @@ void draw() {
     displayEndResult();
     displayPlayAgainButton();
     isOnPlayAgainButton();
+    startGameAgain();
     
   }
   
@@ -283,6 +285,7 @@ void startGameViaMouseClick() { // checks which button user has selected how to 
       state = 3;
       isOnStartButton = false;
       player.pause();
+      musicNum = 3;
     }
     else if (isOnHowButton == true) {
       state = 4;
@@ -334,7 +337,17 @@ void musicHandler() { // a little work around to manage all the background music
     player = minim.loadFile("acid jazz.mp3");
     musicNum = -1;
   }
-
+  if (state == 3 && musicNum == 3) {
+    player = minim.loadFile("Spring_In_My_Step.mp3");
+    player.play();
+    musicNum = -1;
+  }
+  
+  if (state == 3 && musicNum == 4) {
+    player = minim.loadFile("Chee_Zee_Cave_Video_Classica.mp3");
+    player.play();
+    musicNum = -1;
+  }
 }
 
 
@@ -420,7 +433,21 @@ void showPoints() {
   text(points,width/2,height/2);
 }
 
-
+///// lvl handler
+void speedUp() {
+  if (points == 5) {
+    points += 1;
+    player.pause();
+    musicNum = 4;
+    speedOfHurdles *= 4;
+  }
+  if (points == 20) {
+    points += 1;
+    player.pause();
+    musicNum = 4;
+    speedOfHurdles *= 2;
+  }
+}
 
 
 //////////////////////////////////////////////////////////////  this is the end screen text 
@@ -462,6 +489,25 @@ void isOnPlayAgainButton() { // if the mouse is over the play again button.
     b = 13;
   }
 
+}
+void startGameAgain() { // if the user wants to play again
+  if (mousePressed) {
+    if (isOnPlayAgainButton == true){
+      state = 3;
+      isOnPlayAgainButton = false;
+      player.pause();
+      musicNum = 3;
+      reset();
+
+    }
+  }
+}
+void reset() {
+  points = 0;
+  speedOfHurdles = 5;
+  hur1X = 400;
+  hur2X = 400;
+  endOfGame = false;
 }
 
 
