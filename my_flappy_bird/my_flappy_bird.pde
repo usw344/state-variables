@@ -16,13 +16,14 @@ float hur1Width, hur1Height, hur2Width, hur2Height;
 float spaceBetweenHurdles,speedOfHurdles;
 
 
-/// the size of the opening screen button
+/// the size of the opening screen button and the play again button
 float button1X, button1Y, button2X, button2Y,button3X,button3Y;
 float button1W,button1H,button2W,button2H,button3W,button3H;
 
+float button4X,button4Y,button4H,button4W;
 
 // stuff for sound and the state var and other misc, stuff
-int audioPlayerNumber, state,counter,timer,musicNum;
+int audioPlayerNumber, state,counter,timer,musicNum, points;
 float r,g,b,r1,b1,g1,r2,g2,b2;
 
 
@@ -33,7 +34,11 @@ int pX,pY,cX,cY;
 
 
 // for by buttons
-boolean isOnStartButton, isOnHowButton,isOnBackButton;
+boolean isOnStartButton, isOnHowButton,isOnBackButton, isOnPlayAgainButton;
+
+// for the end screen
+String endText;
+boolean endOfGame;
 
 void setup() {
   size(800,800);
@@ -43,25 +48,34 @@ void setup() {
   // for the timer
   timer = millis();
   
-  // button 1
+  // button 1 start 
   button1X = width/12;
   button1Y = height - height/2 - height/3;
   button1W = 300;
   button1H = 100;
   
-  // button 2
+  // button 2 how to play
   button2X = button1X * 6;
   button2Y = height - height/2 - height/3;
+  
   button2W = 300;
   button2H = 100;
+  
   counter = 0;
   
-  // for button 3
+  // for button 3 back button
   button3W = 300;
   button3H = 100;
+ 
   button3X = width/4+button3W/6;
   button3Y = height-height/4;
 
+  // for button 4 play again
+  button4W = 550;
+  button4H = 100;
+  
+  button4X = width/6;
+  button4Y = height - height/3;
   
   // for sound
   minim = new Minim(this);
@@ -111,17 +125,20 @@ void setup() {
   /// for the hurdles, these get changed after wards
   hur1X = 400;
   hur1Y= 0;
+  
   hur1Width = 85;
   hur1Height = height/2;
   
   hur2Width = 85;
   hur2Height = height/2;
+  
   hur2X = 400; 
   hur2Y = height- 20;
 
   
   // player var
   playerX = width/12;
+  
   playerWidth = 50;
   playerHeight = 50;
 }
@@ -145,13 +162,21 @@ void draw() {
     background(255);
     displayHurdles();
     moveHurdle();
-    //randomColorSelector();
+    isPlayerHittingHurs();
     displayPlayer();
+    showPoints();
 }
   if (state == 4) { // the how to play section
     displayBackButton();
     isOnBackButton();
     timeTostartGame();
+
+    
+  }
+  if (state == 5) {
+    displayEndResult();
+    displayPlayAgainButton();
+    isOnPlayAgainButton();
     
   }
   
@@ -320,14 +345,6 @@ void musicHandler() { // a little work around to manage all the background music
 
 // all that has to do with hurdle action
 
-void randomColorSelector() {
-  if (state == 3) {
-    r = random(0,200);
-    g = random(0,190);
-    b = random(0,180);
-  }
-}
-
 void displayHurdles() {
   r = (25);
   g = (193);
@@ -366,6 +383,9 @@ void resetHurdles() {
     hur2X = width;
     spaceBetweenHurdles = random(150,200);
     hur1Height = random(100,height);
+    if (endOfGame == false) {
+      points += 1;
+    }
  
     if (hur2Y <= height) { // this makes sures that the hur2 is floating in air
       hur2Height += height - hur2Height;
@@ -373,26 +393,80 @@ void resetHurdles() {
   }
 }
 
-// the section for playerMovement 
+
+
+/////// the section for playerMovement 
 void displayPlayer() {
   fill(0);
   rect(playerX,mouseY,playerWidth,playerHeight); // also moves the player 
 }
 
 void isPlayerHittingHurs() {
-  if (playerX >= hur1X && mouseY <= hur1X + hur1Height) 
+  if ((playerX + playerWidth >= hur1X && mouseY <= hur1Y + hur1Height) || (playerX + playerWidth >= hur2X && mouseY >= hur2Y) || (playerX + playerWidth >= hur2X && mouseY + playerHeight>= hur2Y)) {
+    state = 5;
+    endOfGame = true;
+  }
+}
+
+
+//// this is misc stuff
+void showPoints() {
+  fill(25,103,56,120);
+  
+  textAlign(CENTER);
+  
+  textSize(200);
+  
+  text(points,width/2,height/2);
 }
 
 
 
 
+//////////////////////////////////////////////////////////////  this is the end screen text 
+
+void displayEndResult() {
+  background(0);
+  
+  endText = "thanks for playing, see you later. Your score is:   " + points;
+  
+  textSize(29);
+  fill(255);
+  textAlign(CENTER);
+  
+  text(endText, width/2,height/2);
+
+}
+ 
+ 
+void displayPlayAgainButton() {
+  fill(r,g,b);
+  rect(button4X,button4Y,button4W,button4H);
+  
+  
+  fill(0);
+  textSize(90);
+  text("PLAY AGAIN", button4W-button4W/4 ,button4Y + button4H/2 + button4H/5);
+}
+ 
+void isOnPlayAgainButton() { // if the mouse is over the play again button. 
+  if ((mouseY > button4Y) && (mouseY < button4Y + button4H) && (mouseX < button4X + button4W) && (mouseX > button4X)) {
+    r = 242;
+    g = 207;
+    b = 181;
+    isOnPlayAgainButton = true;
+  }
+  else {
+    r = 255;
+    g = 118;
+    b = 13;
+  }
+
+}
 
 
 void keyPressed() {
-  if (key == 'w') {
-    state = 3;
-  }
-  if (key == 's') {
-    speedOfHurdles *= 2;
-  }
+if (key == 'w') {
+  state = 3;
+}
 }
