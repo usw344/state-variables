@@ -1,5 +1,6 @@
 // this game is going to be my last without arrays and objects and datatypes;
-//
+
+//extra for experts includes, a much better solution to the audio than last time. Also the addition of a splash screen to open is a fist for me. and the end of magic numbers yaaa!!!!
 
 // loading minim
 import ddf.minim.*;
@@ -49,9 +50,10 @@ void setup() {
   timer = millis();
   
   // button 1 start 
-  button1X = width/12;
-  button1Y = height - height/2 - height/3;
-  button1W = 300;
+  button1X = width/2- width/4;
+  button1Y = height/2- height/6;
+  
+  button1W = 400;
   button1H = 100;
   
   // button 2 how to play
@@ -133,8 +135,10 @@ void setup() {
   hur2Height = height/2;
   
   hur2X = 400; 
-  hur2Y = height- 20;
+  hur2Y = height- playerWidth;
 
+  
+  
   
   // player var
   playerX = width/12;
@@ -154,12 +158,12 @@ void draw() {
   if (state == 2) {// the game menu
     drawButtons();
     isOnButtonStart();
-    isOnHowButton();
+    //isOnHowButton();
     startGameViaMouseClick();
   }
   
   if (state == 3) { // THE MAIN GAME LOOP
-    background(255);
+    
     displayHurdles();
     moveHurdle();
     isPlayerHittingHurs();
@@ -167,13 +171,13 @@ void draw() {
     showPoints();
     speedUp();
 }
-  if (state == 4) { // the how to play section
-    displayBackButton();
-    isOnBackButton();
-    timeTostartGame();
+  //if (state == 4) { // the how to play section
+    //displayBackButton();
+    //isOnBackButton();
+    //timeTostartGame();
 
     
-  }
+  //}
   if (state == 5) {
     displayEndResult();
     displayPlayAgainButton();
@@ -194,6 +198,8 @@ void openingSplash() {
      counter += 50;
    }
     
+   
+   
    imageMode(CENTER);
    image(openingCircle,width/2,height/2-25,counter,counter+50);// draw the circle 
 }
@@ -203,9 +209,13 @@ void dropingInM() {
      mY += 60;// drop the m
    }
    
+  
+   
    if (mY >= height/2-25) {// once the m in place
      player.play();// play the explosion
    }
+   
+   
    
    image(openingM,width/2,mY,700,700);// drawing the M where needed 
 }
@@ -213,11 +223,15 @@ void MProductions(){
   if ((mY >= height/2) && (cY > height - height/3 + 200)) {// once m in place
    cY -= 50; // move the copy right
    pY -= 55; // move the linux in place
-  }
+}
+  
+  
   imageMode(CENTER);
+  
   image(openingCopy, width/4,cY,400,400);   // draw copyright sign
   
   image(openingLinux, width/2 + width/8, pY,400,400);// draw the linux logo
+  
   
   if ((cY <= height - height/3 + 200) &&  (millis() >= 2800)) {// once all steps above are done
     state = 2;// change the state 
@@ -227,24 +241,27 @@ void MProductions(){
 //////////////////////// code for the menu selections thing
 
 void drawButtons() {
-  
-  player.play();// starting the background music
   background(0);
   
+  player.play();// starting the background music
+
   noStroke();
   fill(r,g,b);
-  //rectMode(CENTER);
-
+  
   rect(button1X,button1Y,button1W,button1H);// drawing the start button
-  
-  fill(r1,g1,b1);
-  rect(button2X,button2Y,button2W,button2H);// drawing the how to play button
-  
+
   // stuff for the texxt
   fill(255);
   textSize(45);
+  
   text("START",button1X+ button1W/4,  button1Y+button1H/2 + button1H/8);
-  text("Instructions",button2X + button2W/12,  button2Y + button2H/2 + button2H/8);
+  
+  
+  //text("Instructions",button2X + button2W/12,  button2Y + button2H/2 + button2H/8);
+    
+  //fill(r1,g1,b1);
+  //rect(button2X,button2Y,button2W,button2H);// drawing the how to play button
+  
 
 
 }
@@ -255,6 +272,8 @@ void isOnButtonStart() { // if the mouse is over the start button then yes trigg
     b = 181;
     isOnStartButton = true;
   }
+  
+  
   else {
     r = 255;
     g = 118;
@@ -263,30 +282,35 @@ void isOnButtonStart() { // if the mouse is over the start button then yes trigg
 
 }
 
-void isOnHowButton() {
-  if ((mouseY > button2Y) && (mouseY < button2Y + button2H) && (mouseX < button2X + button2W) && (mouseX > button2X)) {
-    r1 = 242;
-    g1 = 207;
-    b1 = 181;
-    isOnHowButton = true;
-  }
-  else {
-    r1 = 255;
-    g1 = 118;
-    b1 = 13;
-  }
+//void isOnHowButton() {
+  //if ((mouseY > button2Y) && (mouseY < button2Y + button2H) && (mouseX < button2X + button2W) && (mouseX > button2X)) {
+    //r1 = 242;
+    //g1 = 207;
+    //b1 = 181;
+    //isOnHowButton = true;
+  //}
+  //else {
+    //r1 = 255;
+    //g1 = 118;
+    //b1 = 13;
+  //}
 
-}
+//}
 
 
 void startGameViaMouseClick() { // checks which button user has selected how to play or start
   if (mousePressed) {
+    
+    
     if (isOnStartButton == true){
       state = 3;
       isOnStartButton = false;
-      player.pause();
+      
+      player.pause();// this stop the current music and plays the next one
       musicNum = 3;
     }
+    
+    
     else if (isOnHowButton == true) {
       state = 4;
       isOnHowButton = false;
@@ -300,31 +324,36 @@ void displayBackButton() {
   background(0);
   fill(r2,g2,b2);
   rect(button3X,button3Y,button3W,button3H);// drawing the how to back button
+  
+  
   fill(255);
   textSize(45);
   text("Back",button3X + button3W/4,  button3Y + button3H/2 + button3H/8);
 }
 
-void timeTostartGame() {
+void timeTostartGame() { // if the player click the button start the game
   if (isOnBackButton && mousePressed) {
   state = 2;
-  player.pause();
   isOnBackButton = false;
+  
+  player.pause();
+  
+
   }
 }
 
-void isOnBackButton() {
-  if ((mouseY > button3Y) && (mouseY < button3Y + button3H) && (mouseX < button3X + button3W) && (mouseX > button3X)) {
-    r2 = 242;
-    g2 = 207;
-    b2 = 181;
-    isOnBackButton = true;
-  }
-  else {
-    r2 = 255;
-    g2 = 118;
-    b2 = 13;
-  }
+//void isOnBackButton() {
+  //if ((mouseY > button3Y) && (mouseY < button3Y + button3H) && (mouseX < button3X + button3W) && (mouseX > button3X)) {
+    //r2 = 242;
+    //g2 = 207;
+    //b2 = 181;
+    //isOnBackButton = true;
+  //}
+  //else {
+    //r2 = 255;
+    //g2 = 118;
+    //b2 = 13;
+ // }
 
 }
 
@@ -335,17 +364,20 @@ void isOnBackButton() {
 void musicHandler() { // a little work around to manage all the background music in the app credits for songs in the skecth folder.
   if (state == 2 && musicNum == 2) {
     player = minim.loadFile("acid jazz.mp3");
-    musicNum = -1;
+    
+    musicNum = -1;// this stop minim from crashing by not making the file load again and again
   }
   if (state == 3 && musicNum == 3) {
     player = minim.loadFile("Spring_In_My_Step.mp3");
     player.play();
+    
     musicNum = -1;
   }
   
   if (state == 3 && musicNum == 4) {
     player = minim.loadFile("Chee_Zee_Cave_Video_Classica.mp3");
     player.play();
+    
     musicNum = -1;
   }
 }
@@ -359,21 +391,26 @@ void musicHandler() { // a little work around to manage all the background music
 // all that has to do with hurdle action
 
 void displayHurdles() {
+  background(255);
   r = (25);
   g = (193);
   b = (71);
+  
   fill(r,g,b);
   noStroke();
-
   rect(hur1X,hur1Y,hur1Width,hur1Height);
   
   // defining the hur2Y here.
   hur2Y = hur1Height + spaceBetweenHurdles;
-  if (hur2Y >= height) { // makes sure you 
+  
+  
+  if (hur2Y >= height) { // makes sure you can actually make it by
     hur2Y = height-50;
     hur1Y = 0;
 
   }
+  
+  
   if (hur2Height > 700 && hur1Height > 700) { // make sures you do not get a wall
     hur1Height = height/2 - 60;
     hur2Height = height/2 + 60;
@@ -384,37 +421,45 @@ void displayHurdles() {
 }
 
 void moveHurdle() {
-
   hur1X -= speedOfHurdles;
   hur2X -= speedOfHurdles;
+  
   resetHurdles();
 }
 
 void resetHurdles() {
-  if (hur1X < 0 - hur1Width && hur2X < 0 -hur2Width) {
+  if (hur1X < 0 - hur1Width && hur2X < 0 -hur2Width) { // if the hur are past the edge of the screen
     hur1X = width;
     hur2X = width;
-    spaceBetweenHurdles = random(150,200);
-    hur1Height = random(100,height);
-    if (endOfGame == false) {
+    
+    spaceBetweenHurdles = random(150,200);// resets the space between the the hur
+    hur1Height = random(0,height-playerHeight);
+    
+    
+   
+    if (endOfGame == false) {// and if the player hasnt been hit add a point
       points += 1;
     }
  
+    
+    
     if (hur2Y <= height) { // this makes sures that the hur2 is floating in air
       hur2Height += height - hur2Height;
       }
-  }
+  
+
+}
 }
 
 
 
 /////// the section for playerMovement 
-void displayPlayer() {
+void displayPlayer() {// drawing the player square
   fill(0);
   rect(playerX,mouseY,playerWidth,playerHeight); // also moves the player 
 }
 
-void isPlayerHittingHurs() {
+void isPlayerHittingHurs() { // cllision detection
   if ((playerX + playerWidth >= hur1X && mouseY <= hur1Y + hur1Height) || (playerX + playerWidth >= hur2X && mouseY >= hur2Y) || (playerX + playerWidth >= hur2X && mouseY + playerHeight>= hur2Y)) {
     state = 5;
     endOfGame = true;
@@ -437,15 +482,21 @@ void showPoints() {
 void speedUp() {
   if (points == 5) {
     points += 1;
+    speedOfHurdles *= 4;// speed up after 5 points
+    
     player.pause();
     musicNum = 4;
-    speedOfHurdles *= 4;
+
   }
+  
+  
   if (points == 20) {
     points += 1;
+    speedOfHurdles *= 2;
+    
     player.pause();
     musicNum = 4;
-    speedOfHurdles *= 2;
+
   }
 }
 
@@ -454,13 +505,11 @@ void speedUp() {
 
 void displayEndResult() {
   background(0);
-  
-  endText = "thanks for playing, see you later. Your score is:   " + points;
-  
-  textSize(29);
+   textSize(29);
   fill(255);
   textAlign(CENTER);
   
+  endText = "thanks for playing, see you later. Your score is:   " + points; // prints the final score
   text(endText, width/2,height/2);
 
 }
@@ -481,8 +530,11 @@ void isOnPlayAgainButton() { // if the mouse is over the play again button.
     r = 242;
     g = 207;
     b = 181;
+    
     isOnPlayAgainButton = true;
   }
+  
+  
   else {
     r = 255;
     g = 118;
@@ -495,6 +547,8 @@ void startGameAgain() { // if the user wants to play again
     if (isOnPlayAgainButton == true){
       state = 3;
       isOnPlayAgainButton = false;
+      
+      //resting the game
       player.pause();
       musicNum = 3;
       reset();
@@ -503,16 +557,18 @@ void startGameAgain() { // if the user wants to play again
   }
 }
 void reset() {
-  points = 0;
-  speedOfHurdles = 5;
-  hur1X = 400;
+  points = 0; //setting the points to 0 for a restart
+  speedOfHurdles = 5; // putting the hurdles down to human speed
+  
+  hur1X = 400;//  making sure that the player doesnt hit the hur on restart
   hur2X = 400;
-  endOfGame = false;
+  
+  endOfGame = false;// to start the point counter again
 }
 
 
-void keyPressed() {
-if (key == 'w') {
-  state = 3;
-}
-}
+//void keyPressed() { // a cheat if you want to skip to game right away.
+//if (key == 'w') {
+//  state = 3;
+//}
+//}
